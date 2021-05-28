@@ -1,45 +1,53 @@
 .default {
-  background-color: #FFFFFF;
-  color: black;
-  border: 1px #800080;
+  background-color: #282A36;
+  color: #F2F2F2;
+  border: 1px #FF79C6;
 }
 
 .info {
-  color: #BFBFBF;
+  color: #F2F2F2;
 }
 
 /* process boxes */
 .unit-process-box {
+  border: 1px #FF79C6;
 }
 
 .system-result-box {
+  border: 2px #BD93F9;
 }
 
 .library-process-box {
+  border: 2px #F1FA8C;
 }
 
 .sub-system-box {
+  border: 2px #804096;
 }
 
 /* flow links */
-
 .product-flow-link {
+  color: #8BE9FD;
 }
 
 .waste-flow-link {
+  color: #FFB86C;
 }
 
 .elementary-flow-link {
+  color: #50FA7B;
 }
 
 /* flow labels */
 
 .product-flow-label {
+  color: #8BE9FD;
 }
 
 .waste-flow-label {
+  color: #FFB86C;
 }
 
 .elementary-flow-label {
-
+  color: #50FA7B;
 }
