@@ -1,17 +1,29 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <groupId>olca-css-themes</groupId>
+  <groupId>org.openlca</groupId>
   <artifactId>olca-css-themes</artifactId>
   <version>0.0.1</version>
 
   <dependencies>
+
+    <dependency>
+      <groupId>com.helger</groupId>
+      <artifactId>ph-css</artifactId>
+      <version>6.3.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.swt</groupId>
+      <artifactId>swt</artifactId>
+      <version>4.14</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/swt.jar</systemPath>
+    </dependency>
 
     <dependency>
       <groupId>junit</groupId>

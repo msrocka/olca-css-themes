@@ -1,4 +1,4 @@
-package olca-css-themes;
+package org.openlca.app.editors.graphical.themes;
 
 import org.junit.Assert;
 import org.junit.Test;
