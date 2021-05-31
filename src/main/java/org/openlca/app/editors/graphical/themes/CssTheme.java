@@ -13,8 +13,51 @@ public class CssTheme {
 
   private final String name;
 
+  private Color defaultFontColor;
+  private Color defaultBackgroundColor;
+  private Color defaultBorderColor;
+  private Color defaultLinkColor;
+  private Color infoFontColor;
+  private int defaultBorderWidth;
+
   private CssTheme(String name) {
     this.name = name;
+  }
+
+  public Color defaultFontColor() {
+    return defaultFontColor == null
+        ? Colors.black()
+        : defaultFontColor;
+  }
+
+  public Color defaultBackgroundColor() {
+    return defaultBackgroundColor == null
+        ? Colors.white()
+        : defaultBackgroundColor;
+  }
+
+  public Color defaultBorderColor() {
+    return defaultBorderColor == null
+        ? Colors.black()
+        : defaultBorderColor;
+  }
+
+  public Color defaultLinkColor() {
+    return defaultLinkColor == null
+        ? Colors.black()
+        : defaultLinkColor;
+  }
+
+  public Color infoFontColor() {
+    return infoFontColor == null
+        ? Colors.black()
+        : infoFontColor;
+  }
+
+  public Color defaultBorderWidth() {
+    return defaultBorderWidth < 1
+      ? 1
+      : defaultBorderWidth;
   }
 
   public static CssTheme read(File file) {
@@ -78,10 +121,10 @@ public class CssTheme {
   }
 
   private static class BoxConfig {
-    int borderWidth;
-    Color borderColor;
     Color fontColor;
     Color backgroundColor;
+    Color borderColor;
+    int borderWidth;
 
     BoxConfig() {
       borderWidth = 1;

@@ -1,3 +1,7 @@
+:root {
+  --theme: light;
+}
+
 .default {
   background-color: #FFFFFF;
   color: black;
