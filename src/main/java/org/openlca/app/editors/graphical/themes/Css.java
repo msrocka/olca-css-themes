@@ -1,5 +1,8 @@
 package org.openlca.app.editors.graphical.themes;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.IntFunction;
@@ -75,17 +78,41 @@ class Css {
     return false;
   }
 
-
-
   static Optional<Color> getColor(CSSStyleRule rule) {
-    if (rule == null)
-      return Optional.empty();
-    return Optional.empty();
+    return colorOf("color", rule);
+  }
+
+  static Optional<Color> getBackgroundColor(CSSStyleRule rule) {
+    var color = colorOf("background", rule);
+    return color.isPresent()
+      ? color
+      : colorOf("background-color", rule);
+  }
+
+  static Optional<Color> getBorderColor(CSSStyleRule rule) {
+    var color = colorOf("border", rule);
+    return color.isPresent()
+      ? color
+      : colorOf("border-color", rule);
   }
 
   private static Optional<Color> colorOf(String property, CSSStyleRule rule) {
+    for (var value : valuesOf(property, rule)) {
+      var color = swtColorOf(value);
+      if (color.isPresent())
+        return color;
+    }
+    return Optional.empty();
+  }
+
+  /**
+   * Collect the expression values for the given property from the given
+   * rule.
+   */
+  private static List<String> valuesOf(String property, CSSStyleRule rule) {
     if (rule == null)
-      return Optional.empty();
+      return Collections.emptyList();
+    List<String> values = null;
     for (int i = 0; i < rule.getDeclarationCount(); i++) {
       var declaration = rule.getDeclarationAtIndex(i);
       if (declaration == null)
@@ -94,10 +121,18 @@ class Css {
         continue;
       var expression = declaration.getExpression();
       for (int j = 0; j < expression.getMemberCount(); j++) {
-
+        var member = expression.getMemberAtIndex(j);
+        if (member == null)
+          continue;
+        if (values == null) {
+          values = new ArrayList<>();
+        }
+        values.add(member.getAsCSSString());
       }
     }
-    return Optional.empty();
+    return values == null
+      ? Collections.emptyList()
+      : values;
   }
 
   static Optional<Color> swtColorOf(String cssColor) {

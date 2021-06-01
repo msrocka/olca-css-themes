@@ -8,6 +8,7 @@ import java.util.function.Function;
 import com.helger.css.ECSSVersion;
 import com.helger.css.decl.CSSStyleRule;
 import com.helger.css.reader.CSSReader;
+import org.eclipse.swt.graphics.Color;
 import org.junit.Test;
 import org.openlca.core.model.FlowType;
 import org.openlca.util.Pair;
@@ -81,4 +82,24 @@ public class CssTest {
     }
   }
 
+  @Test
+  public void testGetColors() {
+    Function<String, CSSStyleRule> rule = prop -> {
+      var s = ".box { " + prop + ": solid #123456 1px; }";
+      var css = CSSReader.readFromString(s, ECSSVersion.CSS30);
+      assertNotNull(css);
+      return css.getStyleRuleAtIndex(0);
+    };
+
+    var colors = new Color[] {
+      Css.getColor(rule.apply("color")).orElseThrow(),
+      Css.getBackgroundColor(rule.apply("background")).orElseThrow(),
+      Css.getBackgroundColor(rule.apply("background-color")).orElseThrow(),
+      Css.getBorderColor(rule.apply("border")).orElseThrow(),
+      Css.getBorderColor(rule.apply("border-color")).orElseThrow(),
+    };
+    for (var color : colors) {
+      assertEquals("#123456", Css.toHex(color));
+    }
+  }
 }
