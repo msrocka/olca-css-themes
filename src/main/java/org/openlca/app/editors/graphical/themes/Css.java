@@ -5,7 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.function.IntFunction;
+import java.util.function.ToIntFunction;
 
 import com.helger.css.decl.CSSStyleRule;
 import org.eclipse.swt.SWT;
@@ -103,6 +105,28 @@ class Css {
         return color;
     }
     return Optional.empty();
+  }
+
+  static OptionalInt getBorderWidth(CSSStyleRule rule) {
+    ToIntFunction<List<String>> select = values -> {
+      for (var v : values) {
+        if (!v.endsWith("px"))
+          continue;
+        try {
+          return Integer.parseInt(v.substring(0, v.length() - 2), 10);
+        } catch (Exception ignored) {
+        }
+      }
+      return -1;
+    };
+
+    var i = select.applyAsInt(valuesOf("border", rule));
+    if (i >= 0)
+      return OptionalInt.of(i);
+    i = select.applyAsInt(valuesOf("border-width", rule));
+    return i < 0
+      ? OptionalInt.empty()
+      : OptionalInt.of(i);
   }
 
   /**

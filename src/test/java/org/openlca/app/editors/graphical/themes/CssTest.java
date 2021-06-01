@@ -102,4 +102,13 @@ public class CssTest {
       assertEquals("#123456", Css.toHex(color));
     }
   }
+
+  @Test
+  public void testBorderWidth() {
+    var style = ".box { border: 4px solid #fff; }";
+    var css = CSSReader.readFromString(style, ECSSVersion.CSS30);
+    assertNotNull(css);
+    var rule = css.getStyleRuleAtIndex(0);
+    assertEquals(4, Css.getBorderWidth(rule).orElseThrow());
+  }
 }
