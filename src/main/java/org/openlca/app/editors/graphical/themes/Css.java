@@ -75,13 +75,38 @@ class Css {
     return false;
   }
 
-  static Color color(String cssColor) {
+
+
+  static Optional<Color> getColor(CSSStyleRule rule) {
+    if (rule == null)
+      return Optional.empty();
+    return Optional.empty();
+  }
+
+  private static Optional<Color> colorOf(String property, CSSStyleRule rule) {
+    if (rule == null)
+      return Optional.empty();
+    for (int i = 0; i < rule.getDeclarationCount(); i++) {
+      var declaration = rule.getDeclarationAtIndex(i);
+      if (declaration == null)
+        continue;
+      if (!Objects.equals(property, declaration.getProperty()))
+        continue;
+      var expression = declaration.getExpression();
+      for (int j = 0; j < expression.getMemberCount(); j++) {
+
+      }
+    }
+    return Optional.empty();
+  }
+
+  static Optional<Color> swtColorOf(String cssColor) {
     if (cssColor == null)
-      return Colors.black();
+      return Optional.empty();
     var s = cssColor.trim();
     if (s.startsWith("#"))
-      return Colors.fromHex(s);
-    return switch (s.trim().toLowerCase()) {
+      return Optional.ofNullable(Colors.fromHex(s));
+    var color = switch (s.trim().toLowerCase()) {
       case "white" -> Colors.systemColor(SWT.COLOR_WHITE);
       case "black" -> Colors.systemColor(SWT.COLOR_BLACK);
       case "darkred" -> Colors.systemColor(SWT.COLOR_DARK_RED);
@@ -98,8 +123,9 @@ class Css {
       case "blue" -> Colors.systemColor(SWT.COLOR_BLUE);
       case "magenta" -> Colors.systemColor(SWT.COLOR_MAGENTA);
       case "cyan" -> Colors.systemColor(SWT.COLOR_CYAN);
-      default -> Colors.black();
+      default -> null;
     };
+    return Optional.ofNullable(color);
   }
 
   static String toHex(Color color) {

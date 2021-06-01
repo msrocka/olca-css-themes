@@ -9,7 +9,6 @@ import com.helger.css.ECSSVersion;
 import com.helger.css.decl.CSSStyleRule;
 import com.helger.css.reader.CSSReader;
 import org.junit.Test;
-import org.openlca.app.util.Colors;
 import org.openlca.core.model.FlowType;
 import org.openlca.util.Pair;
 
@@ -62,11 +61,24 @@ public class CssTest {
   }
 
   @Test
-  public void testColor() {
-    assertEquals("#ffffff", Css.toHex(Css.color("white")));
-    assertEquals("#000000", Css.toHex(Css.color("black")));
-    assertEquals("#123456", Css.toHex(Css.color("#123456")));
-    assertEquals("#ff0011", Css.toHex(Css.color("#f01")));
+  public void testSwtColorOf() {
+    var input = new String[] {
+      "white",
+      "black",
+      "#123456",
+      "#f01"
+    };
+    var expected = new String[] {
+      "#ffffff",
+      "#000000",
+      "#123456",
+      "#ff0011",
+    };
+    for (int i = 0; i < input.length; i++) {
+      var swt = Css.swtColorOf(input[i]);
+      assertTrue(swt.isPresent());
+      assertEquals(expected[i], Css.toHex(swt.get()));
+    }
   }
 
 }
