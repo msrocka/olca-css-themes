@@ -1,5 +1,6 @@
 :root {
-  --theme: light;
+  --mode: light;
+  --name: "Default";
 }
 
 .default {
