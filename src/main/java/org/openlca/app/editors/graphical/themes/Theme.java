@@ -2,7 +2,7 @@ package org.openlca.app.editors.graphical.themes;
 
 import java.io.File;
 import java.util.EnumMap;
-import java.util.EnumSet;
+import java.util.Optional;
 
 import com.helger.css.reader.CSSReader;
 import com.helger.css.reader.CSSReaderSettings;
@@ -12,7 +12,7 @@ import org.eclipse.swt.graphics.Color;
 import org.openlca.app.util.Colors;
 import org.openlca.core.model.FlowType;
 
-public class CssTheme {
+public class Theme {
 
   private final String name;
 
@@ -28,7 +28,7 @@ public class CssTheme {
   private final EnumMap<FlowType, Color> linkColors;
   private final EnumMap<BoxType, BoxConfig> boxConfigs;
 
-  private CssTheme(String name) {
+  private Theme(String name) {
     this.name = name;
     this.flowLabelColors = new EnumMap<>(FlowType.class);
     this.linkColors = new EnumMap<>(FlowType.class);
@@ -119,13 +119,13 @@ public class CssTheme {
       : defaultLinkColor();
   }
 
-  public static CssTheme defaults(String name) {
-    return new CssTheme(name);
+  public static Theme defaults(String name) {
+    return new Theme(name);
   }
 
-  public static CssTheme read(File file) {
+  public static Optional<Theme> read(File file) {
     if (file == null)
-      return null;
+      return Optional.empty();
 
     var name = file.getName();
     if (name.endsWith(".css")) {
@@ -135,11 +135,18 @@ public class CssTheme {
     var settings = new CSSReaderSettings();
     var css = CSSReader.readFromFile(file, settings);
     if (css == null)
-      return null;
+      return Optional.empty();
 
-    var theme = new CssTheme(file.getName());
+    var theme = new Theme(file.getName());
 
-    return theme;
+    for (var rule : css.getAllStyleRules()) {
+      rule.getAllSelectors();
+      for (var declaration : rule.getAllDeclarations()) {
+        System.out.println(declaration.getProperty());
+      }
+    }
+
+    return Optional.of(theme);
   }
 
   private static Color color(String s) {

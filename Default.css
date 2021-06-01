@@ -1,11 +1,8 @@
 :root {
   --mode: light;
   --name: "Default";
-}
-
-.default {
-  background-color: #FFFFFF;
-  color: black;
+  color: #000000;
+  background-color: #ffffff;
   border: 1px #800080;
 }
 
@@ -13,8 +10,13 @@
   color: #BFBFBF;
 }
 
+.link {
+  color: #000000;
+}
+
 /* process boxes */
 .unit-process-box {
+  border: 1px #800080;
 }
 
 .system-result-box {

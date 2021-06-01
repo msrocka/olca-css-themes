@@ -6,11 +6,11 @@ import org.junit.Test;
 import org.openlca.app.util.Colors;
 import org.openlca.core.model.FlowType;
 
-public class CssThemeTest {
+public class ThemeTest {
 
   @Test
   public void testDefaults() {
-    var theme = CssTheme.defaults("Default");
+    var theme = Theme.defaults("Default");
     assertEquals("Default", theme.name());
     assertFalse(theme.isDark());
     assertEquals(Colors.black(), theme.defaultFontColor());
@@ -20,7 +20,7 @@ public class CssThemeTest {
     assertEquals(Colors.black(), theme.infoFontColor());
     assertEquals(1, theme.defaultBorderWidth());
 
-    for (var boxType : CssTheme.BoxType.values()) {
+    for (var boxType : Theme.BoxType.values()) {
       assertEquals(Colors.black(), theme.fontColorOf(boxType));
       assertEquals(Colors.white(), theme.backgroundColorOf(boxType));
       assertEquals(Colors.black(), theme.borderColorOf(boxType));
@@ -31,6 +31,8 @@ public class CssThemeTest {
       assertEquals(Colors.black(), theme.fontColorOf(flowType));
       assertEquals(Colors.black(), theme.fontColorOf(flowType));
     }
-
   }
+
+
+
 }

@@ -12,6 +12,7 @@ public class Main {
   public static void main(String[] args) {
     var settings = new CSSReaderSettings();
     var css = CSSReader.readFromFile(new File("Default.css"), settings);
+    /*
     System.out.println(css.getStyleRuleCount());
 
     var rule = css.getStyleRuleAtIndex(0);
@@ -22,6 +23,12 @@ public class Main {
     System.out.println(expression.getMemberCount());
     var member = expression.getMemberAtIndex(0);
     System.out.println(member.getAsCSSString());
+*/
+    for (var rule : css.getAllStyleRules()) {
+      for (var selector: rule.getAllSelectors()) {
+        System.out.println(selector.getAsCSSString());
+      }
+    }
 
     /*
     for (var rule : css.getAllStyleRules()) {
