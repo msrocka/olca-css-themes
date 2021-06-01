@@ -149,32 +149,6 @@ public class Theme {
     return Optional.of(theme);
   }
 
-  private static Color color(String s) {
-    if (s == null)
-      return Colors.black();
-    if (s.startsWith("#"))
-      return Colors.fromHex(s);
-    return switch (s.trim().toLowerCase()) {
-      case "white" -> Colors.systemColor(SWT.COLOR_WHITE);
-      case "black" -> Colors.systemColor(SWT.COLOR_BLACK);
-      case "darkred" -> Colors.systemColor(SWT.COLOR_DARK_RED);
-      case "darkgreen" -> Colors.systemColor(SWT.COLOR_DARK_GREEN);
-      case "darkblue" -> Colors.systemColor(SWT.COLOR_DARK_BLUE);
-      case "darkmagenta" -> Colors.systemColor(SWT.COLOR_DARK_MAGENTA);
-      case "darkyellow" -> Colors.systemColor(SWT.COLOR_DARK_YELLOW);
-      case "darkcyan" -> Colors.systemColor(SWT.COLOR_DARK_CYAN);
-      case "gray", "grey" -> Colors.systemColor(SWT.COLOR_GRAY);
-      case "darkgray", "darkgrey" -> Colors.systemColor(SWT.COLOR_DARK_GRAY);
-      case "red" -> Colors.systemColor(SWT.COLOR_RED);
-      case "green" -> Colors.systemColor(SWT.COLOR_GREEN);
-      case "yellow" -> Colors.systemColor(SWT.COLOR_YELLOW);
-      case "blue" -> Colors.systemColor(SWT.COLOR_BLUE);
-      case "magenta" -> Colors.systemColor(SWT.COLOR_MAGENTA);
-      case "cyan" -> Colors.systemColor(SWT.COLOR_CYAN);
-      default -> Colors.black();
-    };
-  }
-
   enum BoxType {
     UNIT_PROCESS,
     SYSTEM_PROCESS,

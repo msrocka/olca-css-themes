@@ -2,8 +2,12 @@ package org.openlca.app.editors.graphical.themes;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.IntFunction;
 
 import com.helger.css.decl.CSSStyleRule;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.openlca.app.util.Colors;
 import org.openlca.core.model.FlowType;
 
 class Css {
@@ -70,4 +74,52 @@ class Css {
     }
     return false;
   }
+
+  static Color color(String cssColor) {
+    if (cssColor == null)
+      return Colors.black();
+    var s = cssColor.trim();
+    if (s.startsWith("#"))
+      return Colors.fromHex(s);
+    return switch (s.trim().toLowerCase()) {
+      case "white" -> Colors.systemColor(SWT.COLOR_WHITE);
+      case "black" -> Colors.systemColor(SWT.COLOR_BLACK);
+      case "darkred" -> Colors.systemColor(SWT.COLOR_DARK_RED);
+      case "darkgreen" -> Colors.systemColor(SWT.COLOR_DARK_GREEN);
+      case "darkblue" -> Colors.systemColor(SWT.COLOR_DARK_BLUE);
+      case "darkmagenta" -> Colors.systemColor(SWT.COLOR_DARK_MAGENTA);
+      case "darkyellow" -> Colors.systemColor(SWT.COLOR_DARK_YELLOW);
+      case "darkcyan" -> Colors.systemColor(SWT.COLOR_DARK_CYAN);
+      case "gray", "grey" -> Colors.systemColor(SWT.COLOR_GRAY);
+      case "darkgray", "darkgrey" -> Colors.systemColor(SWT.COLOR_DARK_GRAY);
+      case "red" -> Colors.systemColor(SWT.COLOR_RED);
+      case "green" -> Colors.systemColor(SWT.COLOR_GREEN);
+      case "yellow" -> Colors.systemColor(SWT.COLOR_YELLOW);
+      case "blue" -> Colors.systemColor(SWT.COLOR_BLUE);
+      case "magenta" -> Colors.systemColor(SWT.COLOR_MAGENTA);
+      case "cyan" -> Colors.systemColor(SWT.COLOR_CYAN);
+      default -> Colors.black();
+    };
+  }
+
+  static String toHex(Color color) {
+    if (color == null)
+      return "#000000";
+    IntFunction<String> fmt = c -> {
+      var hex = Integer.toHexString(c);
+      if (hex.length() < 2) {
+        hex = "0" + hex;
+      }
+      if (hex.length() > 2) {
+        hex = hex.substring(0, 2);
+      }
+      return hex;
+    };
+
+    var r = fmt.apply(color.getRed());
+    var g = fmt.apply(color.getGreen());
+    var b = fmt.apply(color.getBlue());
+    return "#" + r + g + b;
+  }
+
 }

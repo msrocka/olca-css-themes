@@ -9,6 +9,7 @@ import com.helger.css.ECSSVersion;
 import com.helger.css.decl.CSSStyleRule;
 import com.helger.css.reader.CSSReader;
 import org.junit.Test;
+import org.openlca.app.util.Colors;
 import org.openlca.core.model.FlowType;
 import org.openlca.util.Pair;
 
@@ -59,4 +60,13 @@ public class CssTest {
       assertEquals(expectedBoxTypes[i], boxType.get());
     }
   }
+
+  @Test
+  public void testColor() {
+    assertEquals("#ffffff", Css.toHex(Css.color("white")));
+    assertEquals("#000000", Css.toHex(Css.color("black")));
+    assertEquals("#123456", Css.toHex(Css.color("#123456")));
+    assertEquals("#ff0011", Css.toHex(Css.color("#f01")));
+  }
+
 }
