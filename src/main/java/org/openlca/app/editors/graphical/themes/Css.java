@@ -10,6 +10,7 @@ import java.util.function.IntFunction;
 import java.util.function.ToIntFunction;
 
 import com.helger.css.decl.CSSStyleRule;
+import com.helger.css.decl.CascadingStyleSheet;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.openlca.app.util.Colors;
@@ -20,30 +21,62 @@ class Css {
   private Css() {
   }
 
+  static Optional<String> themeNameOf(CascadingStyleSheet css) {
+    if (css == null)
+      return Optional.empty();
+    for (int i = 0; i < css.getStyleRuleCount(); i++) {
+      var rule = css.getStyleRuleAtIndex(i);
+      if (!isRoot(rule))
+        continue;
+      for (var value : valuesOf("--name", rule)) {
+        if (value != null && !value.isBlank())
+          return Optional.of(unquote(value));
+      }
+    }
+    return Optional.empty();
+  }
+
+  private static String unquote(String s) {
+    var t = s.trim();
+    if (t.length() < 2)
+      return s;
+    var quote = t.charAt(0);
+    if (quote != '"' && quote != '\'')
+      return s;
+    var buffer = new StringBuilder();
+    for (int i = 1; i < t.length(); i++) {
+      char next = t.charAt(i);
+      if (next == quote)
+        break;
+      buffer.append(next);
+    }
+    return buffer.toString();
+  }
+
   static boolean isRoot(CSSStyleRule rule) {
-    return isPresent(":root", rule);
+    return hasSelector(":root", rule);
   }
 
   static boolean isInfo(CSSStyleRule rule) {
-    return isPresent(".info", rule);
+    return hasSelector(".info", rule);
   }
 
   static boolean isBox(CSSStyleRule rule) {
-    return isPresent(".box", rule);
+    return hasSelector(".box", rule);
   }
 
   static boolean isLabel(CSSStyleRule rule) {
-    return isPresent(".label", rule);
+    return hasSelector(".label", rule);
   }
 
   static Optional<FlowType> flowTypeOf(CSSStyleRule rule) {
     if (rule == null)
       return Optional.empty();
-    if (isPresent(".product", rule))
+    if (hasSelector(".product", rule))
       return Optional.of(FlowType.PRODUCT_FLOW);
-    if (isPresent(".waste", rule))
+    if (hasSelector(".waste", rule))
       return Optional.of(FlowType.WASTE_FLOW);
-    if (isPresent(".elementary-flow", rule))
+    if (hasSelector(".elementary-flow", rule))
       return Optional.of(FlowType.ELEMENTARY_FLOW);
     return Optional.empty();
   }
@@ -51,18 +84,18 @@ class Css {
   static Optional<Theme.BoxType> boxTypeOf(CSSStyleRule rule) {
     if (!isBox(rule))
       return Optional.empty();
-    if (isPresent(".unit-process", rule))
+    if (hasSelector(".unit-process", rule))
       return Optional.of(Theme.BoxType.UNIT_PROCESS);
-    if (isPresent(".system-process", rule))
+    if (hasSelector(".system-process", rule))
       return Optional.of(Theme.BoxType.SYSTEM_PROCESS);
-    if (isPresent(".library-process", rule))
+    if (hasSelector(".library-process", rule))
       return Optional.of(Theme.BoxType.LIBRARY_PROCESS);
-    if (isPresent(".sub-system", rule))
+    if (hasSelector(".sub-system", rule))
       return Optional.of(Theme.BoxType.SUB_SYSTEM);
     return Optional.empty();
   }
 
-  static boolean isPresent(String selector, CSSStyleRule rule) {
+  static boolean hasSelector(String selector, CSSStyleRule rule) {
     if (rule == null)
       return false;
     for (int i = 0; i < rule.getSelectorCount(); i++) {

@@ -86,9 +86,7 @@ public class CssTest {
   public void testGetColors() {
     Function<String, CSSStyleRule> rule = prop -> {
       var s = ".box { " + prop + ": solid #123456 1px; }";
-      var css = CSSReader.readFromString(s, ECSSVersion.CSS30);
-      assertNotNull(css);
-      return css.getStyleRuleAtIndex(0);
+      return firstRuleOf(s);
     };
 
     var colors = new Color[] {
@@ -106,9 +104,25 @@ public class CssTest {
   @Test
   public void testBorderWidth() {
     var style = ".box { border: 4px solid #fff; }";
-    var css = CSSReader.readFromString(style, ECSSVersion.CSS30);
-    assertNotNull(css);
-    var rule = css.getStyleRuleAtIndex(0);
+    var rule = firstRuleOf(style);
     assertEquals(4, Css.getBorderWidth(rule).orElseThrow());
   }
+
+  @Test
+  public void testThemeNameOf() {
+    var css = CSSReader.readFromString(
+      ":root { --name: 'Example theme'; }",
+      ECSSVersion.CSS30);
+    assertEquals(
+      "Example theme",
+      Css.themeNameOf(css).orElseThrow());
+  }
+
+
+  private CSSStyleRule firstRuleOf(String css) {
+    var parsedCss = CSSReader.readFromString(css, ECSSVersion.CSS30);
+    assertNotNull(parsedCss);
+    return parsedCss.getStyleRuleAtIndex(0);
+  }
+
 }
