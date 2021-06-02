@@ -36,6 +36,20 @@ class Css {
     return Optional.empty();
   }
 
+  static boolean hasDarkMode(CascadingStyleSheet css) {
+    if (css == null)
+      return false;
+    for (int i = 0; i < css.getStyleRuleCount(); i++) {
+      var rule = css.getStyleRuleAtIndex(i);
+      for (var value : valuesOf("--mode", rule)) {
+        var mode = unquote(value);
+        if ("dark".equalsIgnoreCase(mode))
+          return true;
+      }
+    }
+    return false;
+  }
+
   private static String unquote(String s) {
     var t = s.trim();
     if (t.length() < 2)

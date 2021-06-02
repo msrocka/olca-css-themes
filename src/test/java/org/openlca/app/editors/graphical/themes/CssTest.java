@@ -118,6 +118,15 @@ public class CssTest {
       Css.themeNameOf(css).orElseThrow());
   }
 
+  @Test
+  public void testHasDarkMode() {
+    var dark = CSSReader.readFromString(
+      ":root { --mode: 'dark'; }", ECSSVersion.CSS30);
+    var light = CSSReader.readFromString(
+      ":root { --mode: 'light'; }", ECSSVersion.CSS30);
+    assertTrue(Css.hasDarkMode(dark));
+    assertFalse(Css.hasDarkMode(light));
+  }
 
   private CSSStyleRule firstRuleOf(String css) {
     var parsedCss = CSSReader.readFromString(css, ECSSVersion.CSS30);
