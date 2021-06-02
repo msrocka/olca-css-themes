@@ -19,7 +19,7 @@ public class Theme {
   private boolean isDark;
   private Color graphBackgroundColor;
   private Color defaultLinkColor;
-  private Color infoFontColor;
+  private Color infoLabelColor;
 
   private final EnumMap<FlowType, Color> flowLabelColors;
   private final EnumMap<FlowType, Color> linkColors;
@@ -30,6 +30,10 @@ public class Theme {
     this.flowLabelColors = new EnumMap<>(FlowType.class);
     this.linkColors = new EnumMap<>(FlowType.class);
     this.boxConfigs = new EnumMap<>(Box.class);
+  }
+
+  public static Theme defaults(String name) {
+    return new Theme(name);
   }
 
   public String name() {
@@ -87,21 +91,17 @@ public class Theme {
       : linkColor();
   }
 
-  public Color infoFontColor() {
-    return infoFontColor == null
+  public Color infoLabelColor() {
+    return infoLabelColor == null
       ? Colors.black()
-      : infoFontColor;
+      : infoLabelColor;
   }
 
-  public Color fontColorOf(FlowType flowType) {
+  public Color labelColor(FlowType flowType) {
     var color = flowLabelColors.get(flowType);
     return color != null
       ? color
       : boxFontColor(Box.DEFAULT);
-  }
-
-  public static Theme defaults(String name) {
-    return new Theme(name);
   }
 
   public static Optional<Theme> read(File file) {
@@ -150,9 +150,17 @@ public class Theme {
         });
       }
 
+      // labels
+      if (Css.isLabel(rule)) {
+        Css.getColor(rule).ifPresent(color -> {
+          if (Css.isInfo(rule)) {
+            theme.infoLabelColor = color;
+          }
+          Css.flowTypeOf(rule).ifPresent(flowType ->
+            theme.flowLabelColors.put(flowType, color));
+        });
+      }
     }
-
-
     return Optional.of(theme);
   }
 

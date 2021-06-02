@@ -27,11 +27,11 @@ public class ThemeTest {
 
     assertEquals(Colors.white(), theme.graphBackgroundColor());
     assertEquals(Colors.black(), theme.linkColor());
-    assertEquals(Colors.black(), theme.infoFontColor());
+    assertEquals(Colors.black(), theme.infoLabelColor());
 
     for (var flowType : FlowType.values()) {
-      assertEquals(Colors.black(), theme.fontColorOf(flowType));
-      assertEquals(Colors.black(), theme.fontColorOf(flowType));
+      assertEquals(Colors.black(), theme.labelColor(flowType));
+      assertEquals(Colors.black(), theme.labelColor(flowType));
     }
   }
 
@@ -72,6 +72,11 @@ public class ThemeTest {
       };
       return Pair.of(expected, Css.toHex(theme.boxBorderColor(box)));
     });
+
+    // labels
+    assertEquals("#bfbfbf", Css.toHex(theme.infoLabelColor()));
+    checkFlowType(
+      flowType -> Pair.of("#000000", Css.toHex(theme.labelColor(flowType))));
   }
 
   @Test
@@ -94,6 +99,17 @@ public class ThemeTest {
         case ELEMENTARY_FLOW -> "#50fa7b";
       };
       return Pair.of(expected, Css.toHex(theme.linkColor(flowType)));
+    });
+
+    // labels
+    assertEquals("#f2f2f2", Css.toHex(theme.infoLabelColor()));
+    checkFlowType(flowType -> {
+      var expexted = switch (flowType) {
+        case PRODUCT_FLOW -> "#8be9fd";
+        case WASTE_FLOW -> "#ffb86c";
+        case ELEMENTARY_FLOW -> "#50fa7b";
+      };
+      return Pair.of(expexted, Css.toHex(theme.labelColor(flowType)));
     });
   }
 
