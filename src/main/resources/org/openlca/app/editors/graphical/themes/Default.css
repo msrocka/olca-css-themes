@@ -39,7 +39,7 @@
 }
 
 /* sub-systems */
-.box .library-process {
+.box .sub-systems {
   color: #000000;       /* font color */
   background: #ffffff;  /* background color */
   border: 2px #125985;  /* border width and colcor */
@@ -73,7 +73,7 @@
 
 /* info-headers */
 .label .info {
-  color: #BFBFBF;
+  color: #bfbfbf;
 }
 
 /* product flows */
