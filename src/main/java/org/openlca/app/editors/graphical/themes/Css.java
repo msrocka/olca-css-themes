@@ -95,18 +95,18 @@ class Css {
     return Optional.empty();
   }
 
-  static Optional<Theme.BoxType> boxTypeOf(CSSStyleRule rule) {
+  static Optional<Theme.Box> boxTypeOf(CSSStyleRule rule) {
     if (!isBox(rule))
       return Optional.empty();
     if (hasSelector(".unit-process", rule))
-      return Optional.of(Theme.BoxType.UNIT_PROCESS);
+      return Optional.of(Theme.Box.UNIT_PROCESS);
     if (hasSelector(".system-process", rule))
-      return Optional.of(Theme.BoxType.SYSTEM_PROCESS);
+      return Optional.of(Theme.Box.SYSTEM_PROCESS);
     if (hasSelector(".library-process", rule))
-      return Optional.of(Theme.BoxType.LIBRARY_PROCESS);
+      return Optional.of(Theme.Box.LIBRARY_PROCESS);
     if (hasSelector(".sub-system", rule))
-      return Optional.of(Theme.BoxType.SUB_SYSTEM);
-    return Optional.of(Theme.BoxType.DEFAULT);
+      return Optional.of(Theme.Box.SUB_SYSTEM);
+    return Optional.of(Theme.Box.DEFAULT);
   }
 
   static boolean hasSelector(String selector, CSSStyleRule rule) {

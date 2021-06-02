@@ -47,12 +47,12 @@ public class CssTest {
       ".library-process",
       ".sub-system",
     };
-    var expectedBoxTypes = new Theme.BoxType[]{
-      Theme.BoxType.DEFAULT,
-      Theme.BoxType.UNIT_PROCESS,
-      Theme.BoxType.SYSTEM_PROCESS,
-      Theme.BoxType.LIBRARY_PROCESS,
-      Theme.BoxType.SUB_SYSTEM,
+    var expectedBoxTypes = new Theme.Box[]{
+      Theme.Box.DEFAULT,
+      Theme.Box.UNIT_PROCESS,
+      Theme.Box.SYSTEM_PROCESS,
+      Theme.Box.LIBRARY_PROCESS,
+      Theme.Box.SUB_SYSTEM,
     };
     for (int i = 0; i < boxSelectors.length; i++) {
       var r = rule.apply(".box " + boxSelectors[i]);

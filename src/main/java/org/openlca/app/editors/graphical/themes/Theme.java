@@ -22,13 +22,13 @@ public class Theme {
 
   private final EnumMap<FlowType, Color> flowLabelColors;
   private final EnumMap<FlowType, Color> linkColors;
-  private final EnumMap<BoxType, BoxConfig> boxConfigs;
+  private final EnumMap<Box, BoxConfig> boxConfigs;
 
   private Theme(String name) {
     this.name = name;
     this.flowLabelColors = new EnumMap<>(FlowType.class);
     this.linkColors = new EnumMap<>(FlowType.class);
-    this.boxConfigs = new EnumMap<>(BoxType.class);
+    this.boxConfigs = new EnumMap<>(Box.class);
   }
 
   public String name() {
@@ -45,29 +45,29 @@ public class Theme {
       : graphBackgroundColor;
   }
 
-  public Color boxFontColor(BoxType type) {
-    var config = boxConfigs.get(type);
+  public Color boxFontColor(Box box) {
+    var config = boxConfigs.get(box);
     return config != null && config.fontColor != null
       ? config.fontColor
       : Colors.black();
   }
 
-  public Color boxBackgroundColor(BoxType type) {
-    var config = boxConfigs.get(type);
+  public Color boxBackgroundColor(Box box) {
+    var config = boxConfigs.get(box);
     return config != null && config.backgroundColor != null
       ? config.backgroundColor
       : graphBackgroundColor();
   }
 
-  public Color boxBorderColor(BoxType type) {
-    var config = boxConfigs.get(type);
+  public Color boxBorderColor(Box box) {
+    var config = boxConfigs.get(box);
     return config != null && config.borderColor != null
       ? config.borderColor
       : Colors.black();
   }
 
-  public int boxBorderWidth(BoxType type) {
-    var config = boxConfigs.get(type);
+  public int boxBorderWidth(Box box) {
+    var config = boxConfigs.get(box);
     return config != null
       ? Math.max(1, config.borderWidth)
       : 1;
@@ -89,7 +89,7 @@ public class Theme {
     var color = flowLabelColors.get(flowType);
     return color != null
       ? color
-      : boxFontColor(BoxType.DEFAULT);
+      : boxFontColor(Box.DEFAULT);
   }
 
   public Color linkColorOf(FlowType flowType) {
@@ -124,10 +124,13 @@ public class Theme {
 
     theme.isDark = Css.hasDarkMode(css);
 
+
+
+
     return Optional.of(theme);
   }
 
-  enum BoxType {
+  enum Box {
     DEFAULT,
     UNIT_PROCESS,
     SYSTEM_PROCESS,
