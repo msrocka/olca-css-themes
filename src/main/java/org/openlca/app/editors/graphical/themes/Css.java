@@ -83,6 +83,10 @@ class Css {
     return hasSelector(".label", rule);
   }
 
+  static boolean isLink(CSSStyleRule rule) {
+    return hasSelector(".link", rule);
+  }
+
   static Optional<FlowType> flowTypeOf(CSSStyleRule rule) {
     if (rule == null)
       return Optional.empty();

@@ -74,10 +74,17 @@ public class Theme {
       : 1;
   }
 
-  public Color defaultLinkColor() {
+  public Color linkColor() {
     return defaultLinkColor == null
       ? Colors.black()
       : defaultLinkColor;
+  }
+
+  public Color linkColor(FlowType flowType) {
+    var color = linkColors.get(flowType);
+    return color != null
+      ? color
+      : linkColor();
   }
 
   public Color infoFontColor() {
@@ -91,13 +98,6 @@ public class Theme {
     return color != null
       ? color
       : boxFontColor(Box.DEFAULT);
-  }
-
-  public Color linkColorOf(FlowType flowType) {
-    var color = linkColors.get(flowType);
-    return color != null
-      ? color
-      : defaultLinkColor();
   }
 
   public static Theme defaults(String name) {
@@ -127,8 +127,29 @@ public class Theme {
 
     for (int i = 0; i < css.getStyleRuleCount(); i++) {
       var rule = css.getStyleRuleAtIndex(i);
+
+      // box config
       Css.boxOf(rule)
         .ifPresent(box -> theme.styleBox(box, rule));
+
+      // root config
+      if (Css.isRoot(rule)) {
+        Css.getBackgroundColor(rule)
+          .ifPresent(color -> theme.graphBackgroundColor = color);
+      }
+
+      // links
+      if (Css.isLink(rule)) {
+        var flowType = Css.flowTypeOf(rule);
+        Css.getColor(rule).ifPresent(color -> {
+          if (flowType.isPresent()) {
+            theme.linkColors.put(flowType.get(), color);
+          } else {
+            theme.defaultLinkColor = color;
+          }
+        });
+      }
+
     }
 
 

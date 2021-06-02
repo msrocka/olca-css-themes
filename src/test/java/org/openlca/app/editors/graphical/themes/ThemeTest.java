@@ -26,7 +26,7 @@ public class ThemeTest {
     }
 
     assertEquals(Colors.white(), theme.graphBackgroundColor());
-    assertEquals(Colors.black(), theme.defaultLinkColor());
+    assertEquals(Colors.black(), theme.linkColor());
     assertEquals(Colors.black(), theme.infoFontColor());
 
     for (var flowType : FlowType.values()) {
@@ -44,6 +44,11 @@ public class ThemeTest {
       .orElseThrow();
 
     assertFalse(theme.isDark());
+    assertEquals("#ffffff", Css.toHex(theme.graphBackgroundColor()));
+
+    // links
+    assertEquals("#000000", Css.toHex(theme.linkColor()));
+    checkFlowType(type -> Pair.of("#000000", Css.toHex(theme.linkColor(type))));
 
     // box font
     checkBox(box -> Pair.of("#000000", Css.toHex(theme.boxFontColor(box))));
@@ -57,6 +62,16 @@ public class ThemeTest {
       int actual = theme.boxBorderWidth(box);
       return Pair.of(expected, actual);
     });
+
+    // border colors
+    checkBox(box -> {
+      var expected = switch (box) {
+        case LIBRARY_PROCESS -> "#ff9700";
+        case SUB_SYSTEM -> "#125985";
+        default -> "#800080";
+      };
+      return Pair.of(expected, Css.toHex(theme.boxBorderColor(box)));
+    });
   }
 
   @Test
@@ -68,12 +83,31 @@ public class ThemeTest {
       .orElseThrow();
 
     assertTrue(theme.isDark());
+    assertEquals("#282a36", Css.toHex(theme.graphBackgroundColor()));
+
+    // links
+    assertEquals("#f2f2f2", Css.toHex(theme.linkColor()));
+    checkFlowType(flowType -> {
+      var expected = switch (flowType) {
+        case PRODUCT_FLOW -> "#8be9fd";
+        case WASTE_FLOW -> "#ffb86c";
+        case ELEMENTARY_FLOW -> "#50fa7b";
+      };
+      return Pair.of(expected, Css.toHex(theme.linkColor(flowType)));
+    });
   }
 
   private <R> void checkBox(Function<Theme.Box, Pair<R, R>> fn) {
     for (var box : Theme.Box.values()) {
       var r = fn.apply(box);
       assertEquals("failed for Box=" + box, r.first, r.second);
+    }
+  }
+
+  private <R> void checkFlowType(Function<FlowType, Pair<R, R>> fn) {
+    for (var type : FlowType.values()) {
+      var r = fn.apply(type);
+      assertEquals("failed for FlowType=" + type, r.first, r.second);
     }
   }
 }
