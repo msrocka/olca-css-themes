@@ -73,7 +73,7 @@ public class ThemeTest {
   private <R> void checkBox(Function<Theme.Box, Pair<R, R>> fn) {
     for (var box : Theme.Box.values()) {
       var r = fn.apply(box);
-      assertEquals(r.first, r.second);
+      assertEquals("failed for Box=" + box, r.first, r.second);
     }
   }
 }

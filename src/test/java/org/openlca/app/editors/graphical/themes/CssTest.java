@@ -57,7 +57,7 @@ public class CssTest {
     for (int i = 0; i < boxSelectors.length; i++) {
       var r = rule.apply(".box " + boxSelectors[i]);
       assertTrue(Css.isBox(r));
-      var boxType = Css.boxTypeOf(r);
+      var boxType = Css.boxOf(r);
       assertTrue("failed to get box-type for " + boxSelectors[i], boxType.isPresent());
       assertEquals(expectedBoxTypes[i], boxType.get());
     }

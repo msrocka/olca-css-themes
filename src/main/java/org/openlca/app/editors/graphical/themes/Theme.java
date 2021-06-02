@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.EnumMap;
 import java.util.Optional;
 
+import com.helger.css.decl.CSSStyleRule;
 import com.helger.css.reader.CSSReader;
 import com.helger.css.reader.CSSReaderSettings;
 
@@ -124,10 +125,26 @@ public class Theme {
 
     theme.isDark = Css.hasDarkMode(css);
 
-
+    for (int i = 0; i < css.getStyleRuleCount(); i++) {
+      var rule = css.getStyleRuleAtIndex(i);
+      Css.boxOf(rule)
+        .ifPresent(box -> theme.styleBox(box, rule));
+    }
 
 
     return Optional.of(theme);
+  }
+
+  private void styleBox(Box box, CSSStyleRule rule) {
+    var config = boxConfigs.computeIfAbsent(box, $ -> new BoxConfig());
+    Css.getColor(rule)
+      .ifPresent(color -> config.fontColor = color);
+    Css.getBackgroundColor(rule)
+      .ifPresent(color -> config.backgroundColor = color);
+    Css.getBorderColor(rule)
+      .ifPresent(color -> config.borderColor = color);
+    Css.getBorderWidth(rule)
+      .ifPresent(width -> config.borderWidth = width);
   }
 
   enum Box {

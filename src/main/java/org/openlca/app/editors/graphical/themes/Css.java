@@ -95,7 +95,7 @@ class Css {
     return Optional.empty();
   }
 
-  static Optional<Theme.Box> boxTypeOf(CSSStyleRule rule) {
+  static Optional<Theme.Box> boxOf(CSSStyleRule rule) {
     if (!isBox(rule))
       return Optional.empty();
     if (hasSelector(".unit-process", rule))
