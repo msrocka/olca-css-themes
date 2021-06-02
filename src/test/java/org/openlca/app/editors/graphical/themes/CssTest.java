@@ -41,12 +41,14 @@ public class CssTest {
 
     // box types
     var boxSelectors = new String[]{
+      "",
       ".unit-process",
       ".system-process",
       ".library-process",
       ".sub-system",
     };
     var expectedBoxTypes = new Theme.BoxType[]{
+      Theme.BoxType.DEFAULT,
       Theme.BoxType.UNIT_PROCESS,
       Theme.BoxType.SYSTEM_PROCESS,
       Theme.BoxType.LIBRARY_PROCESS,

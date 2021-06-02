@@ -7,7 +7,6 @@ import java.util.Optional;
 import com.helger.css.reader.CSSReader;
 import com.helger.css.reader.CSSReaderSettings;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.openlca.app.util.Colors;
 import org.openlca.core.model.FlowType;
@@ -17,12 +16,9 @@ public class Theme {
   private final String name;
 
   private boolean isDark;
-  private Color defaultFontColor;
-  private Color defaultBackgroundColor;
-  private Color defaultBorderColor;
+  private Color graphBackgroundColor;
   private Color defaultLinkColor;
   private Color infoFontColor;
-  private int defaultBorderWidth;
 
   private final EnumMap<FlowType, Color> flowLabelColors;
   private final EnumMap<FlowType, Color> linkColors;
@@ -43,22 +39,38 @@ public class Theme {
     return isDark;
   }
 
-  public Color defaultFontColor() {
-    return defaultFontColor == null
-      ? Colors.black()
-      : defaultFontColor;
-  }
-
-  public Color defaultBackgroundColor() {
-    return defaultBackgroundColor == null
+  public Color graphBackgroundColor() {
+    return graphBackgroundColor == null
       ? Colors.white()
-      : defaultBackgroundColor;
+      : graphBackgroundColor;
   }
 
-  public Color defaultBorderColor() {
-    return defaultBorderColor == null
-      ? Colors.black()
-      : defaultBorderColor;
+  public Color boxFontColor(BoxType type) {
+    var config = boxConfigs.get(type);
+    return config != null && config.fontColor != null
+      ? config.fontColor
+      : Colors.black();
+  }
+
+  public Color boxBackgroundColor(BoxType type) {
+    var config = boxConfigs.get(type);
+    return config != null && config.backgroundColor != null
+      ? config.backgroundColor
+      : graphBackgroundColor();
+  }
+
+  public Color boxBorderColor(BoxType type) {
+    var config = boxConfigs.get(type);
+    return config != null && config.borderColor != null
+      ? config.borderColor
+      : Colors.black();
+  }
+
+  public int boxBorderWidth(BoxType type) {
+    var config = boxConfigs.get(type);
+    return config != null
+      ? Math.max(1, config.borderWidth)
+      : 1;
   }
 
   public Color defaultLinkColor() {
@@ -73,43 +85,11 @@ public class Theme {
       : infoFontColor;
   }
 
-  public int defaultBorderWidth() {
-    return Math.max(defaultBorderWidth, 1);
-  }
-
-  public Color fontColorOf(BoxType type) {
-    var config = boxConfigs.get(type);
-    return config != null && config.fontColor != null
-      ? config.fontColor
-      : defaultFontColor();
-  }
-
-  public Color backgroundColorOf(BoxType type) {
-    var config = boxConfigs.get(type);
-    return config != null && config.backgroundColor != null
-      ? config.backgroundColor
-      : defaultBackgroundColor();
-  }
-
-  public Color borderColorOf(BoxType type) {
-    var config = boxConfigs.get(type);
-    return config != null && config.borderColor != null
-      ? config.borderColor
-      : defaultBorderColor();
-  }
-
-  public int borderWidthOf(BoxType type) {
-    var config = boxConfigs.get(type);
-    return config != null && config.borderWidth > 0
-      ? config.borderWidth
-      : defaultBorderWidth();
-  }
-
   public Color fontColorOf(FlowType flowType) {
     var color = flowLabelColors.get(flowType);
     return color != null
       ? color
-      : defaultFontColor();
+      : boxFontColor(BoxType.DEFAULT);
   }
 
   public Color linkColorOf(FlowType flowType) {
@@ -127,29 +107,28 @@ public class Theme {
     if (file == null)
       return Optional.empty();
 
-    var name = file.getName();
-    if (name.endsWith(".css")) {
-      name.substring(0, name.length() - 4);
-    }
-
     var settings = new CSSReaderSettings();
     var css = CSSReader.readFromFile(file, settings);
     if (css == null)
       return Optional.empty();
 
-    var theme = new Theme(file.getName());
-
-    for (var rule : css.getAllStyleRules()) {
-      rule.getAllSelectors();
-      for (var declaration : rule.getAllDeclarations()) {
-        System.out.println(declaration.getProperty());
+    // select the theme name
+    var name = Css.themeNameOf(css).orElse(null);
+    if (name == null || name.isBlank()) {
+      name = file.getName();
+      if (name.endsWith(".css")) {
+        name = name.substring(0, name.length() - 4);
       }
     }
+    var theme = defaults(name);
+
+    theme.isDark = Css.hasDarkMode(css);
 
     return Optional.of(theme);
   }
 
   enum BoxType {
+    DEFAULT,
     UNIT_PROCESS,
     SYSTEM_PROCESS,
     SUB_SYSTEM,

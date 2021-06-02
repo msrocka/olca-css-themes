@@ -106,7 +106,7 @@ class Css {
       return Optional.of(Theme.BoxType.LIBRARY_PROCESS);
     if (hasSelector(".sub-system", rule))
       return Optional.of(Theme.BoxType.SUB_SYSTEM);
-    return Optional.empty();
+    return Optional.of(Theme.BoxType.DEFAULT);
   }
 
   static boolean hasSelector(String selector, CSSStyleRule rule) {

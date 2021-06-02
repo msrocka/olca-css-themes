@@ -1,5 +1,7 @@
 package org.openlca.app.editors.graphical.themes;
 
+import java.io.File;
+
 import static org.junit.Assert.*;
 
 import org.junit.Test;
@@ -9,23 +11,21 @@ import org.openlca.core.model.FlowType;
 public class ThemeTest {
 
   @Test
-  public void testDefaults() {
+  public void testEmpty() {
     var theme = Theme.defaults("Default");
     assertEquals("Default", theme.name());
     assertFalse(theme.isDark());
-    assertEquals(Colors.black(), theme.defaultFontColor());
-    assertEquals(Colors.white(), theme.defaultBackgroundColor());
-    assertEquals(Colors.black(), theme.defaultBorderColor());
+
+    for (var box : Theme.BoxType.values()) {
+      assertEquals(Colors.black(), theme.boxFontColor(box));
+      assertEquals(Colors.white(), theme.boxBackgroundColor(box));
+      assertEquals(Colors.black(), theme.boxBorderColor(box));
+      assertEquals(1, theme.boxBorderWidth(box));
+    }
+
+    assertEquals(Colors.white(), theme.graphBackgroundColor());
     assertEquals(Colors.black(), theme.defaultLinkColor());
     assertEquals(Colors.black(), theme.infoFontColor());
-    assertEquals(1, theme.defaultBorderWidth());
-
-    for (var boxType : Theme.BoxType.values()) {
-      assertEquals(Colors.black(), theme.fontColorOf(boxType));
-      assertEquals(Colors.white(), theme.backgroundColorOf(boxType));
-      assertEquals(Colors.black(), theme.borderColorOf(boxType));
-      assertEquals(1, theme.borderWidthOf(boxType));
-    }
 
     for (var flowType : FlowType.values()) {
       assertEquals(Colors.black(), theme.fontColorOf(flowType));
@@ -33,6 +33,25 @@ public class ThemeTest {
     }
   }
 
+  @Test
+  public void testDefaultTheme() {
+    var themes = Themes.loadFrom(new File("./target/test-themes"));
+    var theme = themes.stream()
+      .filter(t -> t.name().equals("Default"))
+      .findAny()
+      .orElseThrow();
 
+    assertFalse(theme.isDark());
+  }
 
+  @Test
+  public void testDarkTheme() {
+    var themes = Themes.loadFrom(new File("./target/test-themes"));
+    var theme = themes.stream()
+      .filter(t -> t.name().equals("Dark"))
+      .findAny()
+      .orElseThrow();
+
+    assertTrue(theme.isDark());
+  }
 }
