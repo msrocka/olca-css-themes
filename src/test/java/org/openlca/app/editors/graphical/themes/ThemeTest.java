@@ -14,7 +14,7 @@ public class ThemeTest {
 
   @Test
   public void testEmpty() {
-    var theme = Theme.defaults("Default");
+    var theme = Theme.defaults("empty.css", "Default");
     assertEquals("Default", theme.name());
     assertFalse(theme.isDark());
 
@@ -43,6 +43,7 @@ public class ThemeTest {
       .findAny()
       .orElseThrow();
 
+    assertEquals("Default.css", theme.file());
     assertFalse(theme.isDark());
     assertEquals("#ffffff", Css.toHex(theme.graphBackgroundColor()));
 
@@ -87,6 +88,7 @@ public class ThemeTest {
       .findAny()
       .orElseThrow();
 
+    assertEquals("Dark.css", theme.file());
     assertTrue(theme.isDark());
     assertEquals("#282a36", Css.toHex(theme.graphBackgroundColor()));
 

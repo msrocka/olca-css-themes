@@ -14,6 +14,7 @@ import org.openlca.core.model.FlowType;
 
 public class Theme {
 
+  private final String file;
   private final String name;
 
   private boolean isDark;
@@ -25,15 +26,26 @@ public class Theme {
   private final EnumMap<FlowType, Color> linkColors;
   private final EnumMap<Box, BoxConfig> boxConfigs;
 
-  private Theme(String name) {
+  private Theme(String file, String name) {
+    this.file = file;
     this.name = name;
     this.flowLabelColors = new EnumMap<>(FlowType.class);
     this.linkColors = new EnumMap<>(FlowType.class);
     this.boxConfigs = new EnumMap<>(Box.class);
   }
 
-  public static Theme defaults(String name) {
-    return new Theme(name);
+  public static Theme defaults(String file, String name) {
+    return new Theme(file, name);
+  }
+
+  /**
+   * Returns the file name of a theme. All themes are located in a single
+   * folder. Thus, the file name can be used as the ID of the theme.
+   *
+   * @return the file name of the theme
+   */
+  public String file() {
+    return file;
   }
 
   public String name() {
@@ -104,7 +116,7 @@ public class Theme {
       : boxFontColor(Box.DEFAULT);
   }
 
-  public static Optional<Theme> read(File file) {
+  public static Optional<Theme> loadFrom(File file) {
     if (file == null)
       return Optional.empty();
 
@@ -121,7 +133,7 @@ public class Theme {
         name = name.substring(0, name.length() - 4);
       }
     }
-    var theme = defaults(name);
+    var theme = defaults(file.getName(), name);
 
     theme.isDark = Css.hasDarkMode(css);
 

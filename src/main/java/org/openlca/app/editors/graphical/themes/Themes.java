@@ -54,14 +54,15 @@ public final class Themes {
       return noCss();
     var themes = new ArrayList<Theme>();
     for (var file : files) {
-      var theme = Theme.read(file);
+      var theme = Theme.loadFrom(file);
       theme.ifPresent(themes::add);
     }
     return themes.isEmpty() ? noCss() : themes;
   }
 
   private static List<Theme> noCss() {
-    return Collections.singletonList(Theme.defaults("Default; no CSS"));
+    return Collections.singletonList(
+      Theme.defaults("no.css", "Default; no CSS"));
   }
 
 }
