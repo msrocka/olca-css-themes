@@ -1,15 +1,18 @@
 # CSS styling for the graphical editor in openLCA
 
-In openLCA 2, you can select a color themes for the graphical editor (via the
+In openLCA 2, you can select a color theme for the graphical editor (via the
 context menu of the editor > settings):
 
 ![](images/settings.png)
 
-A theme can be configured in a CSS file. openLCA 2 stores these themes in the
+A theme can be configured in a CSS file. openLCA 2 stores these CSS files in the
 `graph-themes` folder of the openLCA workspace (which is currently still
 `~/openLCA-data-1.4`; on Windows `C:/Users/[YOU]/openLCA-data-1.4`):
 
 ![](images/workspace.png)
+
+
+## Creating a new theme
 
 A new theme can be added by simply adding a CSS file to that folder:
 
@@ -24,7 +27,7 @@ should be helpful:
 :root {
   --name: 'Dark';         /* the name of the theme */
   --mode: 'dark';         /* this is a dark theme */
-  background: #282a36;  /* the background color of the graph */
+  background: #282a36;    /* the background color of the graph */
 }
 
 /* -- process boxes -- */
@@ -39,23 +42,36 @@ should be helpful:
 /* ... */
 ```
 
+When you reopen the settings dialog, you should then see your new theme:
+
+![](images/theme-added-settings.png)
 
 
+## Current themes
 
-Note that we only support a small subset of CSS for the styling (e.g. just
+Note that we only support a small subset of CSS for our themes (e.g. just
 hex-values for colors like `#123456` and a few color names like `blue` or
-`red`). The best way to create a new theme is just to copy an existing theme and
-to modify it. Here are some examples:
+`red`). Currently, the following themes are included in openLCA 2:
 
-* The current [Default]() theme:
+* [Default](./src/main/resources/org/openlca/app/editors/graphical/themes/Default.css):
 
-* The current [Dark]() theme:
+![](images/default-theme.png)
 
-* The current [Light]() theme:
+* [Dark](./src/main/resources/org/openlca/app/editors/graphical/themes/Dark.css):
 
-* The current [Gray]() theme:
-
-* The [Happy Unicorn]() theme (not meant that seriously; but shows all options):
+![](images/dark-theme.png)
 
 
-https://download.eclipse.org/eclipse/downloads/drops4/R-4.19-202103031800/
+The following elements can be currently styled:
+
+* [x] background color of the graph
+* [x] process type dependent font colors, border colors, border widths, and
+      background colors of process boxes
+* [ ] flow type dependent colors for process links (not yet implemented in the
+      UI)
+* [x] font colors for headers
+* [x] flow type dependent font colors for inputs and outputs
+
+We are thinking about adding these additional features:
+
+* [ ] support for rounded borders
